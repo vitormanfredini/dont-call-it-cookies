@@ -3,16 +3,16 @@
  * Don't Call It Cookies
  *
  * @package     dont-call-it-cookies
- * @author      Vítor Manfredini
+ * @author      Forever Beta
  * @license     GPL-2.0-or-later
  *
  * @wordpress-plugin
  * Plugin Name: Don't Call It Cookies
  * Plugin URI:  https://placeholder.com
- * Description: This plugin changes the term "Cookies" for "Data Collectors" in cookie consent screens/popups.
+ * Description: This simple plugin replaces the term Cookies for Data Collectors in the most popular cookie consent plugins available.
  * Version:     1.0.0
- * Author:      Vítor Manfredini
- * Author URI:  https://vitormanfredini.com
+ * Author:      Forever Beta
+ * Author URI:  https://forever-beta.com/
  * Text Domain: dont-call-it-cookies
  * License:     GPL v2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
@@ -59,7 +59,6 @@ function dcic_check_dependencies() {
 function dcic_dependencies_notice(){
     ?><div class="error">
         <h1>Don't Call It Cookies</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
         <p>This plugin needs to be used alongside with one of these:</p>
         <ul>
             <li><a target="_blank" href="<?php echo get_admin_url(); ?>plugin-install.php?tab=plugin-information&plugin=cookie-law-info">CookieYes | GDPR Cookie Consent & Compliance Notice (CCPA Ready)</a></li>
@@ -80,6 +79,13 @@ function dcic_run(){
     if(defined('CLI_SETTINGS_FIELD')){
         add_filter('option_'.CLI_SETTINGS_FIELD, 'dcic_filter_cookie_law_info');
         add_filter('option_cookielawinfo_privacy_overview_content_settings', 'dcic_filter_cookie_law_info');
+        //make all output go through first through a callback function
+        add_action('wp_head', function(){
+            ob_start("dcic_filter_buffer_cookie_law_info");
+        });
+        add_action('wp_footer', function(){
+            ob_end_flush();
+        },999999);
     }
 
     //gdpr-cookie-compliance
@@ -137,6 +143,26 @@ function dcic_filter_complianz_gdpr($buffer){
 
     return $buffer;
 
+}
+
+/**
+* Filters whole HTML to change plugin cookie-law-info's output
+*/
+function dcic_filter_buffer_cookie_law_info($buffer){
+
+    $marker1 = 'cli-tab-section-container';
+    $marker2 = 'cli-modal-footer';
+    $arrParts = explode($marker1,$buffer);
+    if(isset($arrParts[1])){
+        $arrParts2 = explode($marker2,$arrParts[1]);
+        if(isset($arrParts2[1])){
+            $arrParts2[0] = dcic_filter_string($arrParts2[0]);
+            $arrParts[1] = implode($arrParts2,$marker2);
+            $buffer = implode($arrParts,$marker1);
+        }
+    }
+
+    return $buffer;
 }
 
 /**

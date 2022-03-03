@@ -4,7 +4,7 @@
 
 It's made to be simple, lightweight and easy for anyone with a wordpress powered website to use.
 
-The plugin currently supports 3 of the most popular cookie consent plugins in the Wordpress Plugin Database:
+The plugin currently supports 3 of the most popular cookie consent plugins in the Wordpress Plugin Directory:
 * [CookieYes | GDPR Cookie Consent & Compliance Notice (CCPA Ready)](https://wordpress.org/plugins/cookie-law-info/)
 * [GDPR Cookie Compliance (CCPA ready)](https://wordpress.org/plugins/gdpr-cookie-compliance/)
 * [Complianz | GDPR/CCPA Cookie Consent](https://wordpress.org/plugins/complianz-gdpr/)
